@@ -1,0 +1,31 @@
+name: build docker image
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+jobs:
+  Build:
+    needs: CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout the code 
+        uses: actions/checkout@v4
+      - name: build docker image
+        uses: docker/setup-buildx-action@v3
+      - name: login dockerhub
+        uses: docker/login-action@v3
+        with:
+          username: ${{secrets.DOCKER.USERNAME}}
+          password: ${{secrets.DOCKER.TOKEN}}
+      - name: build and push
+        uses: docker/build-push-action@v6 
+        with:
+          context: Github-Action/.
+          push: true
+          tags: |
+            sorena2004/flask-app:latest
+            sorena2004/flask-app:${{ github.sha }}
