@@ -9,7 +9,6 @@ on:
   workflow_dispatch:
 jobs:
   Build:
-    needs: CI
     runs-on: ubuntu-latest
     steps:
       - name: checkout the code 
