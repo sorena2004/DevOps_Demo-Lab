@@ -7,5 +7,6 @@ Stack
 - GitHub Actions
 - Docker
 - Kubernetes
+- GitOps (futures)
 
 Author: Hossein Moradi
