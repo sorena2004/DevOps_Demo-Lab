@@ -12,7 +12,7 @@ WORKDIR /app
 
 COPY app/requirements.txt .
 
-RUN python -m pip install --no-cach-dir -r requirements.txt
+RUN python -m pip install --no-cache-dir -r requirements.txt
 
 COPY app/ .
 
