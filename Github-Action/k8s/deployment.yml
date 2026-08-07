@@ -1,0 +1,19 @@
+apiVersion: app/v1 
+kind: Deployment 
+metadata:
+  name: demo-app
+spec:
+  template:
+    metadata:
+      name: flask-app
+      labels: python-app 
+    spec:
+      container:
+        name: flask-app 
+        image: sorena2004/flask-app:latest
+        ports:
+          - containerPort: 5000
+  replicas: 3
+  selector: 
+    matchlabels:
+      labels: python-app
