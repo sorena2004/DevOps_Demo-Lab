@@ -6,7 +6,7 @@ on:
       - develop
 jobs:
   CI:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: setup python
         uses: actions/setup-python@v4
