@@ -1,0 +1,28 @@
+name: deploy app to k8s
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+jobs:
+  Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout the code 
+        uses: actions/checkout@v4 
+      - name: install kubectl
+        uses: azure/setup-kubctl@v4
+      - name: configure kubeconfig
+        run: |
+          mkdir -p ~/.kube 
+          echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config 
+        run: kubectl get nodes
+      - name: deploy on k8s
+        run: kubectl apply -f k8s/
+      - name: update image
+        run: |
+          kubectl set image deployment/demo-app \
+          flask-app=sorena2004/flask-app:${{ github.sha }}
+        run: kubectl rollout status deployment/demo-app 
