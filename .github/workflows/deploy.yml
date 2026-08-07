@@ -13,7 +13,7 @@ jobs:
       - name: checkout the code 
         uses: actions/checkout@v4 
       - name: install kubectl
-        uses: azure/setup-kubctl@v4
+        uses: azure/setup-kubectl@v4
       - name: configure kubeconfig
         run: |
           mkdir -p ~/.kube 
