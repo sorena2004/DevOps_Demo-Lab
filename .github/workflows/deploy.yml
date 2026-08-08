@@ -1,5 +1,8 @@
 name: deploy app to k8s 
 on:
+  push:
+    branches:
+      -  master
   workfolw_dispatch:
 jobs:
   Deploy:
