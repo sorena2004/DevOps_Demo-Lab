@@ -1,5 +1,5 @@
 # GitHub Actions Demo
-'''text
+```text
 Github-Action/
 ├── .github/
 │   └── workflows/
