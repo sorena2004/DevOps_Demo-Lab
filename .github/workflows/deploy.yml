@@ -1,9 +1,6 @@
 name: deploy app to k8s 
 on:
-  push:
-    branches:
-      -  master
-  workfolw_dispatch:
+  workflow_dispatch:
 jobs:
   Deploy:
     runs-on: self-hosted 
