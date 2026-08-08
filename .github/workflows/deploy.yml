@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 jobs:
   Deploy:
-    runs-on: self-hosted 
+    runs-on: ubuntu-latest 
     steps:
       - name: checkout the code 
         uses: actions/checkout@v4
