@@ -1,4 +1,4 @@
-name: deploy app to k8s
+name: deploy app to k8s 
 on:
   push:
     branches:
