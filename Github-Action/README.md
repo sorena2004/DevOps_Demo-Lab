@@ -1,5 +1,7 @@
 # GitHub Actions Demo
 ```text
+## Project Structure
+
 Github-Action/
 ├── .github/
 │   └── workflows/
