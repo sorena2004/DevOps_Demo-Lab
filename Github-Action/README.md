@@ -11,7 +11,6 @@ Github-Action/
 |    ├── test.py
 |    └── requirements.txt
 ├── Dockerfile
-├── package.json
 ├── k8s/
 │   ├── deployment.yaml
 │   └── service.yaml
