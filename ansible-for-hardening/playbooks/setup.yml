@@ -3,12 +3,7 @@
   hosts: servers
   become: true
 
-
   tasks:
-    - name: update packages
-      apt:
-        update_cache: true
-
     - name: install basic packages
       apt:
         name:
@@ -22,3 +17,7 @@
           - openvpn
           - fail2ban
         state: present
+  roles:
+    - users
+    - ssh
+    - fail2ban

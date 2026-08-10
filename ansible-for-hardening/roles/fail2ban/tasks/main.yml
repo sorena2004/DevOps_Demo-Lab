@@ -1,0 +1,6 @@
+---
+- name: set fail2ban for ssh
+  ansible.builtin.copy:
+    src: ./template/fail2ban.j2
+    dest: /etc/fail2ban/jail.local
+  notify: restart fail2ban
