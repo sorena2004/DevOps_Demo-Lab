@@ -1,0 +1,24 @@
+---
+- name: initial linux server setup
+  hosts: servers
+  become: true
+
+
+  tasks:
+    - name: update packages
+      apt:
+        update_cache: true
+
+    - name: install basic packages
+      apt:
+        name:
+          - curl
+          - wget
+          - htop
+          - iftop
+          - vim
+          - unzip
+          - git
+          - openvpn
+          - fail2ban
+        state: present
