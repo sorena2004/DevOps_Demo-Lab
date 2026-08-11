@@ -1,6 +1,6 @@
 # Using Ansible For Hardening Server
 
-<br>1) Add non-root user
+<br>1) Add passwordless sudo user
 <br>2) Install some tools
 <br>3) Configure ssh service
 <br>4) Set fail2ban for ssh service
