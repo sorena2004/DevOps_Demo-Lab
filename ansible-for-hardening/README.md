@@ -1,8 +1,8 @@
 # Using Ansible For Hardening Server
 
- install some tools
- configure ssh service
- set fail2ban for ssh service
+<br>install some tools
+<br>configure ssh service
+<br>set fail2ban for ssh service
  configure firewall
 
 ```text
