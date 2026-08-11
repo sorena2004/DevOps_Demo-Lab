@@ -3,7 +3,7 @@
 <br>install some tools
 <br>configure ssh service
 <br>set fail2ban for ssh service
- configure firewall
+<br>configure firewall
 
 ```text
 ├── ansible.cfg
@@ -34,4 +34,5 @@
     └── users
         └── tasks
             └── main.yml
+```text
 Author: Hossein Moradi
