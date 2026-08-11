@@ -1,0 +1,31 @@
+---
+- name: install ufw
+  ansible.builtin.apt:
+    name: ufw
+    state: present
+    update_cache: true
+
+- name: open ssh port
+  community.general.ufw:
+    rule: allow
+    port: "{{item}}"
+    proto: tcp
+  loop:
+    - "{{ssh_config.port}}"
+    - 80
+    - 443
+
+
+- name: incoming policy
+  community.general.ufw:
+    direction: incoming
+    policy: deny
+
+- name: outgoing policy
+  community.general.ufw:
+    direction: outgoing
+    policy: allow
+
+- name: enable ufw
+  community.general.ufw:
+    state: enabled

@@ -1,0 +1,9 @@
+---
+- name: hardening server
+  hosts: servers
+  become: true
+
+  roles:
+    - ssh
+    - fail2ban
+    - ufw
