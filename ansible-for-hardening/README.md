@@ -1,10 +1,10 @@
 # Using Ansible For Hardening Server
 
-<br>1)add non-root user
-<br>2)install some tools
-<br>3)configure ssh service
-<br>4)set fail2ban for ssh service
-<br>5)configure firewall
+<br>1) Add non-root user
+<br>2) Install some tools
+<br>3) Configure ssh service
+<br>4) Set fail2ban for ssh service
+<br>5) Configure firewall
 
 ```text
 ├── ansible.cfg
