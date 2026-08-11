@@ -1,0 +1,34 @@
+name: Docker build and push
+on:
+  push:
+    branches:
+      - master
+jobs:
+  Docker:
+    name: build and push docker image
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service:
+          - api-gateway
+          - user-service
+          - tassk-service
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+      - name: login to docker hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+      - name: set up docker build
+        uses: docker/setup-buildx-action@v3
+      - name: build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./app/${{ matrix.service }}
+          file: ./app/${{ matrix.service }}/Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/${{ matrix.service }}:latest
+            ${{ secrets.DOCKER_USERNAME }}/${{ matrix.service }}:${{ github.sha }}
