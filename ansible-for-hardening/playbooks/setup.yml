@@ -19,5 +19,3 @@
         state: present
   roles:
     - users
-    - ssh
-    - fail2ban
