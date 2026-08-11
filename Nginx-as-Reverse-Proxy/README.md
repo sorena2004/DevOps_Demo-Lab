@@ -1,4 +1,4 @@
-#Nginx as a Reverse-Proxy
+# Nginx as a Reverse-Proxy
 
 <br>1) Dockerize the flask app
 <br>2) Run the app as container
