@@ -17,20 +17,20 @@ spec:
     scaleUp:
       stabilizationWindowSeconds: 60
       policies:
-        - type: pods
+        - type: Pods
           value: 5
           periodSeconds: 60
 
     scaleDown:
       stabilizationWindowSeconds: 60
       policies:
-        - type: pods
+        - type: Pods
           value: 1
           periodSeconds: 120
 
   metrics:
-    - type: resource
-      resource:
+    - type: Resource
+      sesource:
         name: cpu
         target:
           type: Utilization
