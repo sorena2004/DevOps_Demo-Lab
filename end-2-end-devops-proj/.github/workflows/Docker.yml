@@ -1,11 +1,18 @@
 name: Docker build and push
 on:
-  push:
-    branches:
-      - master
+  workflow_run:
+    workflows:
+      CI
+    types:
+      - completed
 jobs:
   Docker:
     name: build and push docker image
+    
+    if: >
+      ${{ github.event.workflow_run.conclusion == "success" &&
+          github.event.workflow_run.head_branch == "master" }}
+
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -16,6 +23,8 @@ jobs:
     steps:
       - name: checkout repo
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
       - name: login to docker hub
         uses: docker/login-action@v3
         with:
@@ -31,4 +40,4 @@ jobs:
           push: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/${{ matrix.service }}:latest
-            ${{ secrets.DOCKER_USERNAME }}/${{ matrix.service }}:${{ github.sha }}
+            ${{ secrets.DOCKER_USERNAME }}/${{ matrix.service }}:${{ github.event.workflow_run.head_sha }}

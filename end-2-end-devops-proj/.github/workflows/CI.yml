@@ -16,19 +16,19 @@ jobs:
           - api-gateway
           - user-service
           - task-service
-        default:
-          run:
-            working-directory: app/${{ matrix.service }}
-        steps:
-          - name: checkout repo
-            uses: actions@checkou@v4
-          - name: setup Node.js 
-            uses: actions@setup-node@v4
-            with:
-              node-version: 22
-              cache: npm
-              cache-dependency-path: app/${{ matrix.service }}/package-lock.json
-          - name: install dependency
-            run: npm ci
-          - name: run tests
-            run: npm test
+    defaults:
+      run:
+        working-directory: app/${{ matrix.service }}
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+      - name: setup Node.js 
+        uses: actions@setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: app/${{ matrix.service }}/package-lock.json
+      - name: install dependency
+        run: npm ci
+      - name: run tests
+        run: npm test
