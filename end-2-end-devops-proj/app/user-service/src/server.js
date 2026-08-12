@@ -19,7 +19,7 @@ const users = [
 ];
 
 app.get("/health", (req, res) => {
-  res.json({
+  res.status(200).json({
     service: "user-service",
     status: "healthy"
   });

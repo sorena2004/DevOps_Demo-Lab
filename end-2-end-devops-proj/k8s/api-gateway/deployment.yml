@@ -1,0 +1,56 @@
+apiVersion: app/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+  namespace: production
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+        - name: api-gateway
+          image: sorena2004/api-gateway:latest
+
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - containerPort: 3000
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 5
+            PeriodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
+
+          env:
+            - name: USER_SERVICE_URL
+              value: "http://user-service:3001"
+
+            - name: TASK_SERVICE_URL
+              value: "http://task-service:3002"
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"

@@ -1,0 +1,54 @@
+apiVersion: app/v1
+kind: Deployment
+
+metadata:
+  name: task-service
+  namespace: production
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: task-service
+
+  template:
+    metadata:
+      labels:
+        app: task-service
+    spec:
+      containers:
+        - name: task-service
+          image: sorena2004/task-service:latest
+
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - containerPort: 3002
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3002
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3002
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: : "128Mi"
+
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+
