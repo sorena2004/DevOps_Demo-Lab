@@ -7,6 +7,14 @@ metadata:
 
 spec:
   replicas: 2
+
+  strategy:
+    type: RollingUpdate
+
+    rollingUpdate:
+      maxunavailable: 0
+      maxSurge: 1
+
   selector:
     matchLabels:
       app: task-service

@@ -1,0 +1,59 @@
+name: Deploy to Kubernetes
+on:
+  workflow_run:
+    workflows:
+      - docker build and push
+    types:
+      - completed
+
+jobs:
+  deploy:
+    name: Deploy to minikube
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        apps: [user-service, task-service, api-gateway]
+
+    if: >
+      ${{ github.event.workflow_run.conclusion == "success" &&
+          github.event.workflow_run.head_branch == "master" }}
+
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: ckeck k8s
+        run: |
+          kubectl cluster-info
+          kubectl get nodes
+
+      - name: check namespace
+        run: | 
+          kubectl get namespace production
+
+      - name: apply namespace
+        run: |
+          kubectl apply -f k8s/namespace.yml
+
+      - name: deploy app
+        run: |
+          kubectl apply -f k8s/${{ matrix.apps }}
+
+      - name: deploy ingress
+        run: |
+          kubectl -f k8s/ingress.yml
+
+      - name: wait for app
+        run: |
+          kubectl rollout status \
+            deployment/${{ matrix.apps }} \
+            - n production \
+            --timeout=120s
+
+      - name: Verify Deployment
+        run: |
+          kubectl get pods -n production
+          kubectl get svc -n production
+          kubectl get ingress -n production
