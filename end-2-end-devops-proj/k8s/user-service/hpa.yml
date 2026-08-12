@@ -1,3 +1,5 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
 metadata:
   name: user-service
   namesoace: production
