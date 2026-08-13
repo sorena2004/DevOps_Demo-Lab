@@ -6,7 +6,7 @@ metadata:
   namespace: production
 
 spec:
-  scalTargetRef:
+  scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: task-service
@@ -18,22 +18,22 @@ spec:
     scaleUp:
       stabilizationWindowSeconds: 60
       policies:
-        type: pods
-        value: 5
-        periodSedconds: 60
+        - type: Pods
+          value: 5
+          periodSeconds: 60
 
     scaleDown:
       stabilizationWindowSeconds: 60
       policies:
-        - type: pods
+        - type: Pods
           value: 1
           periodSeconds: 120
 
-    metrics:
-      - type: Resource
-        resource:
-          name: cpu
-          target:
-            type: Utilization
-            averageUtilization: 70
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
 
