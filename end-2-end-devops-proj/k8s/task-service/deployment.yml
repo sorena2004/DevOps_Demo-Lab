@@ -23,6 +23,12 @@ spec:
     metadata:
       labels:
         app: task-service
+
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "3000"
+
     spec:
       containers:
         - name: task-service
