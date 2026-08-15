@@ -1,0 +1,98 @@
+# End-to-End DevOps Microservices Platform
+
+A local Kubernetes-based DevOps project demonstrating:
+
+- Node.js Microservices
+- Docker
+- Kubernetes
+- Minikube
+- GitHub Actions
+- CI/CD
+- Ingress
+- HPA
+- Prometheus
+- Grafana
+- kube-state-metrics
+- cAdvisor
+- Alertmanager
+- Monitoring
+- Kubernetes Rollback
+- Kubernetes Backup
+
+---
+```text
+.
+├── app/
+│   ├── api-gateway/
+│   │   ├── src/
+│   │   │   ├── server.js
+│   │   │   └── server-test.js
+│   │   ├── package.json
+│   │   └── Dockerfile
+│   │
+│   ├── user-service/
+│   │   ├── src/
+│   │   │   ├── server.js
+│   │   │   └── server-test.js
+│   │   ├── package.json
+│   │   └── Dockerfile
+│   │
+│   └── task-service/
+│       ├── src/
+│       │   ├── server.js
+│       │   └── server-test.js
+│       ├── package.json
+│       └── Dockerfile
+│
+├── k8s/
+│   ├── namespace.yaml
+│   │
+│   ├── api-gateway/
+│   │   ├── deployment.yaml
+│   │   ├── service.yaml
+│   │   └── hpa.yaml
+│   │
+│   ├── user-service/
+│   │   ├── deployment.yaml
+│   │   ├── service.yaml
+│   │   └── hpa.yaml
+│   │
+│   ├── task-service/
+│   │   ├── deployment.yaml
+│   │   ├── service.yaml
+│   │   └── hpa.yaml
+│   │
+│   └── ingress.yaml
+│
+├── monitoring/
+│   ├── prometheus/
+│   ├── grafana/
+│   ├── kube-state-metrics/
+│   ├── cadvisor/
+│   └── alertmanager/
+│
+├── .github/
+│   └── workflows/
+│       ├── ci.yml
+│       ├── docker.yml
+│       └── deploy.yml
+│
+│
+├── .gitignore
+└── README.md
+
+Monitoring:
+
+Prometheus
+   |
+   +-- Application Metrics
+   +-- kube-state-metrics
+   +-- cAdvisor
+   |
+   v
+Grafana
+
+Prometheus
+   |
+   v
+Alertmanager

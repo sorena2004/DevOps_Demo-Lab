@@ -1,71 +1,98 @@
 const express = require("express");
+const client = require("prom-client");
 
 const app = express();
+
 const PORT = process.env.PORT || 3002;
+
+// Default Node.js metrics
+client.collectDefaultMetrics();
+
+// HTTP request counter
+const httpRequestsTotal = new client.Counter({
+  name: "http_requests_total",
+  help: "Total number of HTTP requests",
+  labelNames: ["method", "route", "status_code"],
+});
+
+// HTTP request duration
+const httpRequestDuration = new client.Histogram({
+  name: "http_request_duration_seconds",
+  help: "HTTP request duration in seconds",
+  labelNames: ["method", "route", "status_code"],
+  buckets: [0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2, 5],
+});
 
 app.use(express.json());
 
-const tasks = [
-  {
-    id: 1,
-    title: "Learn Kubernetes",
-    completed: false,
-    userId: 1
-  },
-  {
-    id: 2,
-    title: "Build CI/CD pipeline",
-    completed: true,
-    userId: 1
+// Metrics middleware
+app.use((req, res, next) => {
+  if (req.path === "/metrics") {
+    return next();
   }
-];
 
+  const start = process.hrtime();
+
+  res.on("finish", () => {
+    const diff = process.hrtime(start);
+
+    const duration = diff[0] + diff[1] / 1e9;
+
+    const route = req.route?.path || req.path;
+
+    const labels = {
+      method: req.method,
+      route,
+      status_code: res.statusCode.toString(),
+    };
+
+    httpRequestsTotal.inc(labels);
+    httpRequestDuration.observe(labels, duration);
+  });
+
+  next();
+});
+
+// Health
 app.get("/health", (req, res) => {
   res.status(200).json({
     service: "task-service",
-    status: "healthy"
+    status: "healthy",
   });
 });
 
+// Prometheus metrics
+app.get("/metrics", async (req, res) => {
+  try {
+    res.set("Content-Type", client.register.contentType);
+
+    const metrics = await client.register.metrics();
+
+    res.end(metrics);
+  } catch (error) {
+    res.status(500).end(error);
+  }
+});
+
+// Tasks
 app.get("/tasks", (req, res) => {
-  res.json(tasks);
-});
-
-app.get("/tasks/:id", (req, res) => {
-  const task = tasks.find(
-    task => task.id === Number(req.params.id)
-  );
-
-  if (!task) {
-    return res.status(404).json({
-      error: "Task not found"
-    });
-  }
-
-  res.json(task);
-});
-
-app.post("/tasks", (req, res) => {
-  const { title, userId } = req.body;
-
-  if (!title || !userId) {
-    return res.status(400).json({
-      error: "title and userId are required"
-    });
-  }
-
-  const task = {
-    id: tasks.length + 1,
-    title,
-    completed: false,
-    userId
-  };
-
-  tasks.push(task);
-
-  res.status(201).json(task);
+  res.status(200).json({
+    service: "task-service",
+    tasks: [
+      {
+        id: 1,
+        title: "Learn Kubernetes",
+        completed: false,
+      },
+      {
+        id: 2,
+        title: "Configure Prometheus",
+        completed: true,
+      },
+    ],
+  });
 });
 
 app.listen(PORT, () => {
-  console.log(`Task service running on port ${PORT}`);
+  console.log(`Task Service running on port ${PORT}`);
 });

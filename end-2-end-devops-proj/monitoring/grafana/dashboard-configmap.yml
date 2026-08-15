@@ -1,0 +1,165 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: grafana-dashboard
+  namespace: monitoring
+
+data:
+
+  microservices.json: |
+    {
+      "title": "Microservices Monitoring",
+      "uid": "microservices",
+      "timezone": "browser",
+      "schemaVersion": 39,
+      "version": 1,
+
+      "panels": [
+
+        {
+          "title": "Request Rate",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 0
+          },
+
+          "targets": [
+            {
+              "expr": "sum by (service) (rate(http_requests_total[5m]))",
+              "legendFormat": "{{service}}"
+            }
+          ]
+        },
+
+        {
+          "title": "Total Requests",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 0
+          },
+
+          "targets": [
+            {
+              "expr": "sum by (service) (http_requests_total)",
+              "legendFormat": "{{service}}"
+            }
+          ]
+        },
+
+        {
+          "title": "5xx Error Rate",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 8
+          },
+
+          "targets": [
+            {
+              "expr": "sum by (service) (rate(http_requests_total{status_code=~\"5..\"}[5m]))",
+              "legendFormat": "{{service}}"
+            }
+          ]
+        },
+
+        {
+          "title": "P95 Latency",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 8
+          },
+
+          "targets": [
+            {
+              "expr": "histogram_quantile(0.95, sum by (service, le) (rate(http_request_duration_seconds_bucket[5m])))",
+              "legendFormat": "{{service}}"
+            }
+          ]
+        },
+
+        {
+          "title": "CPU Usage",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 16
+          },
+
+          "targets": [
+            {
+              "expr": "sum by (pod) (rate(container_cpu_usage_seconds_total{namespace=\"production\",container!=\"\",container!=\"POD\"}[5m]))",
+              "legendFormat": "{{pod}}"
+            }
+          ]
+        },
+
+        {
+          "title": "Memory Usage",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 16
+          },
+
+          "targets": [
+            {
+              "expr": "sum by (pod) (container_memory_working_set_bytes{namespace=\"production\",container!=\"\",container!=\"POD\"}) / 1024 / 1024",
+              "legendFormat": "{{pod}}"
+            }
+          ]
+        },
+
+        {
+          "title": "Pod Restarts",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 24
+          },
+
+          "targets": [
+            {
+              "expr": "sum by (pod) (kube_pod_container_status_restarts_total{namespace=\"production\"})",
+              "legendFormat": "{{pod}}"
+            }
+          ]
+        },
+
+        {
+          "title": "Available Replicas",
+          "type": "timeseries",
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 24
+          },
+
+          "targets": [
+            {
+              "expr": "sum by (deployment) (kube_deployment_status_replicas_available{namespace=\"production\"})",
+              "legendFormat": "{{deployment}}"
+            }
+          ]
+        }
+
+      ]
+    }
